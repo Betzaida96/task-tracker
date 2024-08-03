@@ -54,6 +54,23 @@ if (taskList) {
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
+  event.preventDefault(); //stops page from reloading when we submit
+
+  const title = $("#taskTitle").val();
+  const description = $("#task-description").val();
+  const status = "To Do"; //makes this the default status whe a task is created
+  const id = generateTaskId();
+
+  const newTask = {id, title, description, status};
+
+  taskList = taskList || []; //taskList is either the current list of tasks retrieved from localStorage OR if null or undefined, it's initialiezed as an empty array
+  taskList.push(newTask);
+  localStorage.setItem("tasks", JSON.stringify(taskList));
+
+  renderTaskList();
+
+  $("#formModal").modal("hide"); //cloes the modal
+  $("#taskForm")[0].reset(); //resets the form
 
 }
 
