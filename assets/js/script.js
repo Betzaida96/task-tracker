@@ -1,11 +1,10 @@
 
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+let taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+let nextId = JSON.parse(localStorage.getItem("nextId")) ||1;
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-nextId = nextId || 1; //Initializes nextId if it's not already set
 const id = nextId;
 nextId++; //when generateTaskId is called, a unique ID will be produced one higher than the last
 localStorage.setItem("nextId", JSON.stringify(nextId)); //saves the updated nextId to localStorage
@@ -20,16 +19,17 @@ function createTaskCard(task) {
 
   if (dueDate.isBefore(today)) {
     cardColorClass ="bg-danger text-white";
-  } else if (dueDate.diff(today, 'day')<=2) {
+  } else if (dueDate.diff(today, 'day') <= 2) {
     cardColorClass = "bg-warning text-dark";
   }
 
 return `
-<div class="card task-card" id="task-${task.id}">
+<div class="card task-card ${cardColorClass}" id="task-${task.id}">
   <div class="card-body">
     <h5 class="card-title">${task.title}</h5>
     <p class="card-text">${task.description}</p>
-    <button class="btn btn-danger delete-task" data-id=${task.id}">DELETE</button>
+    <p class="card-text"><small>Due: ${task.dueDate}</small></p>
+    <button class="btn btn-danger delete-task" data-id="${task.id}">Delete</button>
   </div>
 </div>
 `;
@@ -43,7 +43,7 @@ $("#in-progress-cards").empty();
 $("#done-cards").empty();
 
 //Iterate over the tasks and add them to the appropriate lane
-if (taskList) {
+
   taskList.forEach(task => {
     const taskCard = createTaskCard(task);
     if (task.status === "To Do") {
@@ -60,21 +60,20 @@ if (taskList) {
     revert: "invalid"
   });
 }
-}
+
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
   event.preventDefault(); //stops page from reloading when we submit
 
   const title = $("#taskTitle").val();
-  const description = $("#task-description").val();
+  const description = $("#taskDescription").val();
   const dueDate = $("#taskDueDate").val();
   const status = "To Do"; //makes this the default status whe a task is created
   const id = generateTaskId();
 
   const newTask = {id, title, description, dueDate, status};
 
-  taskList = taskList || []; //taskList is either the current list of tasks retrieved from localStorage OR if null or undefined, it's initialiezed as an empty array
   taskList.push(newTask);
   localStorage.setItem("tasks", JSON.stringify(taskList));
 
@@ -100,12 +99,16 @@ function handleDrop(event, ui) {
   const taskId = parseInt(ui.draggable.attr("id").replace("task-", ""));
   const newStatus = $(event.target).attr("id").replace("-cards", "");
 
+  console.log("Before update", taskList);
+
   taskList = taskList.map(task => {
     if (task.id === taskId) {
       return { ...task, status: newStatus};
     }
     return task;
   });
+
+  console.log("After update", taskList);
   
   localStorage.setItem("tasks", JSON.stringify(taskList));
   renderTaskList();
