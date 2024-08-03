@@ -14,7 +14,15 @@ return id;
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-
+return `
+<div class="card task-card" id="task-${task.id}">
+  <div class="card-body">
+    <h5 class="card-title">${task.title}</h5>
+    <p class="card-text">${task.description}</p>
+    <button class="btn btn-danger delete-task" data-id=${task.id}">DELETE</button>
+  </div>
+</div>
+`;
 }
 
 // Todo: create a function to render the task list and make cards draggable
