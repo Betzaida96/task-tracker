@@ -1,10 +1,15 @@
+
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-
+nextId = nextId || 1; //Initializes nextId if it's not already set
+const id = nextId;
+nextId++; //when generateTaskId is called, a unique ID will be produced one higher than the last
+localStorage.setItem("nextId", JSON.stringify(nextId)); //saves the updated nextId to localStorage
+return id;
 }
 
 // Todo: create a function to create a task card
