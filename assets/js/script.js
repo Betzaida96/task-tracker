@@ -14,6 +14,16 @@ return id;
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
+  const today = dayjs().startOf('day');
+  const dueDate = dayjs(task.dueDate);
+  let cardColorClass = "";
+
+  if (dueDate.isBefore(today)) {
+    cardColorClass ="bg-danger text-white";
+  } else if (dueDate.diff(today, 'day')<=2) {
+    cardColorClass = "bg-warning text-dark";
+  }
+
 return `
 <div class="card task-card" id="task-${task.id}">
   <div class="card-body">
@@ -58,10 +68,11 @@ function handleAddTask(event){
 
   const title = $("#taskTitle").val();
   const description = $("#task-description").val();
+  const dueDate = $("#taskDueDate").val();
   const status = "To Do"; //makes this the default status whe a task is created
   const id = generateTaskId();
 
-  const newTask = {id, title, description, status};
+  const newTask = {id, title, description, dueDate, status};
 
   taskList = taskList || []; //taskList is either the current list of tasks retrieved from localStorage OR if null or undefined, it's initialiezed as an empty array
   taskList.push(newTask);
@@ -86,7 +97,7 @@ function handleDeleteTask(event){
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-  const taskId = ui.draggable.data("id");
+  const taskId = parseInt(ui.draggable.attr("id").replace("task-", ""));
   const newStatus = $(event.target).attr("id").replace("-cards", "");
 
   taskList = taskList.map(task => {
@@ -109,7 +120,11 @@ $(document).ready(function () {
     drop: handleDrop
   });
 
-  $("#taskDueDate").datepicker();
+  $("#taskDueDate").datepicker({
+    dateFormat: "dd-mm-yy"
+  });
 
-  $("#taskForm").on("submit", handleAddTask);
+  $("#saveTaskButton").on("click", handleAddTask);
+
+  $(document).on("click", ".delete-task", handleDeleteTask);
 });
