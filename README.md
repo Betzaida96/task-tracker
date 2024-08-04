@@ -53,16 +53,6 @@ Open index.html in your web browser, or use a local web server to view the proje
 
 Click the "Delete" button on the task card to remove the task.
 
-## File Structure
-.
-├── assets
-│   ├── css
-│   │   └── style.css       # Custom styles
-│   └── js
-│       └── script.js       # Main JavaScript file
-├── index.html               # Main HTML file
-└── README.md                # Project documentation
-
 ### Customization
 ## Style and Layout:
 
@@ -80,6 +70,7 @@ This project is open-source and available under the MIT License.
 
 ## Photo
 
- C:\Users\btays\bootcamp\task-tracker\task-tracker\assets\Photos\task-tracker.jpg
+![Task Tracker]("C:\Users\btays\bootcamp\task-tracker\task-tracker\assets\Photos\task-tracker.jpg")
 
 ## Link to Website
+https://betzaida96.github.io/task-tracker/
