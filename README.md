@@ -70,7 +70,7 @@ This project is open-source and available under the MIT License.
 
 ## Photo
 
-![Task Tracker]("C:\Users\btays\bootcamp\task-tracker\task-tracker\assets\Photos\task-tracker.jpg")
+![Task Tracker](assets/Photos/task-tracker.jpg)
 
 ## Link to Website
 https://betzaida96.github.io/task-tracker/
