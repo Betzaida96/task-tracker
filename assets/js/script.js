@@ -45,19 +45,29 @@ $("#done-cards").empty();
 //Iterate over the tasks and add them to the appropriate lane
 
   taskList.forEach(task => {
-    const taskCard = createTaskCard(task);
+    
     if (task.status === "To Do") {
-      $("#todo-cards").append(taskCard);
+      $("#todo-cards").append(createTaskCard(taskCard));
     } else if (task.status === "In Progress") {
-      $("#in-progress-cards").append(taskCard);
+      $("#in-progress-cards").append(createTaskCard(taskCard));
     } else if (task.status === "Done") {
-      $("#done-cards").append(taskCard);
+      $("#done-cards").append(createTaskCard(taskCard));
     }
   });
 
   //makethe taskCard draggable
-  $(".task-card").draggable({
-    revert: "invalid"
+  $(".draggable").draggable({
+    zIndex: 100,
+    revert: "invalid",
+    opacity: .5,
+        helper: function(e){
+            const card = $(e.target).hasClass('.ui-draggable')
+            ? $(e.target)
+            : $(e.target).closest('.ui-draggable')
+            return card.clone().css({
+                width: card.outerWidth()
+            })
+        }
   });
 }
 
@@ -96,7 +106,7 @@ function handleDeleteTask(event){
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-  const taskId = parseInt(ui.draggable.attr("id").replace("task-", ""));
+  const taskId = ui.draggable[0].dataset.taskId
   const newStatus = $(event.target).closest('.lane').attr("id").replace("-cards", "");
 
   console.log("Dropping task:", taskId, "into status", newStatus);
@@ -120,7 +130,7 @@ $(document).ready(function () {
   renderTaskList();
 
   $(".lane .card-body").droppable({
-    accept:".task-card",
+    accept:".draggable",
     drop: handleDrop,
     tolerance: "intersect",
     hoverClass: "ui-state-hover"
