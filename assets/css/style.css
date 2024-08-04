@@ -8,11 +8,12 @@ body {
 }
 
 .task-card {
-  margin: 0 auto;
+  margin: 10px auto; /* Add some space between cards */
+  cursor: grab; /* Ensure the cursor indicates dragging */
 }
 
-.task-card:hover {
-  cursor: grab;
+.task-card:active {
+  cursor: grabbing; /* Change cursor while dragging */
 }
 
 .bg-warning {
@@ -21,4 +22,28 @@ body {
 
 .bg-danger {
   background-color: #dc3545 !important;
+}
+
+/* Add a border or background color change when dragging */
+.ui-draggable-dragging {
+  opacity: 0.8; /* Make the card slightly transparent while dragging */
+  border: 2px solid #007bff; /* Highlight the card while dragging */
+}
+
+.lane {
+  padding: 10px;
+}
+
+.lane .card-body {
+  min-height: 100px;
+  border: 2px dashed #ccc; /* Show a dashed border for drop targets */
+}
+
+.ui-state-hover {
+  background-color: #f0f0f0;
+}
+
+.task-card.ui-draggable-dragging {
+  opacity: 0.8;
+  border: 2px solid #007bff;
 }

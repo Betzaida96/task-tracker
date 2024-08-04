@@ -97,18 +97,19 @@ function handleDeleteTask(event){
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   const taskId = parseInt(ui.draggable.attr("id").replace("task-", ""));
-  const newStatus = $(event.target).attr("id").replace("-cards", "");
+  const newStatus = $(event.target).closest('.lane').attr("id").replace("-cards", "");
 
-  console.log("Before update", taskList);
+  console.log("Dropping task:", taskId, "into status", newStatus);
 
   taskList = taskList.map(task => {
     if (task.id === taskId) {
+      console.log("Updating task:", task.id, "to new status", newStatus);
       return { ...task, status: newStatus};
     }
     return task;
   });
 
-  console.log("After update", taskList);
+  console.log("Updated task list:", taskList);
   
   localStorage.setItem("tasks", JSON.stringify(taskList));
   renderTaskList();
@@ -118,9 +119,11 @@ function handleDrop(event, ui) {
 $(document).ready(function () {
   renderTaskList();
 
-  $(".lane").droppable({
+  $(".lane .card-body").droppable({
     accept:".task-card",
-    drop: handleDrop
+    drop: handleDrop,
+    tolerance: "intersect",
+    hoverClass: "ui-state-hover"
   });
 
   $("#taskDueDate").datepicker({
